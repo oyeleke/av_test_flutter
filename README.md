@@ -1,6 +1,6 @@
 # AV TEST AID 
 
-AV Test Aid is an iOS app which aids air men in taking their certification exams, by providing questions and answers.
+AV Test Aid is a flutter app which aids air men in taking their certification exams, by providing questions and answers.
 
 ## Getting Started
 
