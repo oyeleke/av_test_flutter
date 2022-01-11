@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/widgets/app_icon_widget.dart';
@@ -21,9 +22,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Material(
-      child: Center(child: AppIconWidget(image: Assets.appLogo)),
+      child: Container(
+          decoration: BoxDecoration(color: AppColors.main[50]),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppIconWidget(image: Assets.appLogo)
+            ],
+          )
+      ),
     );
   }
 
@@ -34,10 +42,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   navigate() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-
     if (preferences.getBool(Preferences.is_logged_in) ?? false) {
+      print("moved to home");
       Navigator.of(context).pushReplacementNamed(Routes.home);
     } else {
+      print("moved to login");
       Navigator.of(context).pushReplacementNamed(Routes.login);
     }
   }
