@@ -16,5 +16,8 @@ class AppColors {
     900: const Color(0xFF017EFC)
   };
 
+  static const hintTextColor = Color(0xFFDADADA);
+  static const deepBlueColor = Color(0xFF022B61);
+
 
 }

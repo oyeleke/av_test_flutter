@@ -23,9 +23,7 @@ class AppIconWidget extends StatelessWidget {
     print(imageSize);
 
     return Image.asset(
-      image,
-      height: imageSize,
-      width: imageSize,
+      image
     );
   }
 }

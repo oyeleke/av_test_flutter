@@ -1,17 +1,17 @@
 import 'package:another_flushbar/flushbar_helper.dart';
-import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
-import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/widgets/app_icon_widget.dart';
+import 'package:boilerplate/widgets/authentication_page_bg.dart';
 import 'package:boilerplate/widgets/buttons.dart';
 import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
-import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -53,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       primary: true,
+      backgroundColor: AppColors.main[50],
       appBar: EmptyAppBar(),
       body: _buildBody(),
     );
@@ -63,20 +64,31 @@ class _LoginScreenState extends State<LoginScreen> {
     return Material(
       child: Stack(
         children: <Widget>[
-          MediaQuery.of(context).orientation == Orientation.landscape
-              ? Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: _buildLeftSide(),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: _buildRightSide(),
-                    ),
-                  ],
+          AuthenticationPageBG(),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Column(
+              children: [
+                SizedBox(height: 130),
+                AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+                SizedBox(height: 16),
+                Text(
+                  "Continue to your account",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: FontFamily.quickSand,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
                 )
-              : Center(child: _buildRightSide()),
+              ],
+            )
+          ]),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [SizedBox(height: 120), _buildCard()],
+            ),
+          ),
           Observer(
             builder: (context) {
               return _store.success
@@ -97,30 +109,44 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLeftSide() {
-    return SizedBox.expand(
-      child: Image.asset(
-        Assets.carBackground,
-        fit: BoxFit.cover,
+  Widget _buildCard() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [_buildCardContent()],
+        ),
       ),
     );
   }
 
-  Widget _buildRightSide() {
+  Widget _buildCardContent() {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 31.0, vertical: 31),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            AppIconWidget(image: 'assets/icons/ic_appicon.png'),
-            SizedBox(height: 24.0),
             _buildUserIdField(),
+            SizedBox(height: 19.0),
             _buildPasswordField(),
-            _buildForgotPasswordButton(),
-            _buildSignInButton()
+            SizedBox(height: 19.0),
+            _buildSignInButton(),
+            SizedBox(height: 19.0),
+            Row(
+              children: [
+                _buildSignUpInsteadButton(),
+                Spacer(),
+                _buildForgotPasswordButton(),
+              ],
+            )
           ],
         ),
       ),
@@ -138,6 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
           textController: _userEmailController,
           inputAction: TextInputAction.next,
           autoFocus: false,
+          isIcon: false,
           onChanged: (value) {
             _store.setUserId(_userEmailController.text);
           },
@@ -159,6 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
           isObscure: true,
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.lock,
+          isIcon: false,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
           textController: _passwordController,
           focusNode: _passwordFocusNode,
@@ -173,29 +201,55 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildForgotPasswordButton() {
     return Align(
-      alignment: FractionalOffset.centerRight,
-      child: FlatButton(
-        padding: EdgeInsets.all(0.0),
+      alignment: FractionalOffset.bottomRight,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.all(0.0),
+        ),
         child: Text(
-          AppLocalizations.of(context).translate('login_btn_forgot_password'),
-          style: Theme.of(context)
-              .textTheme
-              .caption
-              ?.copyWith(color: Colors.orangeAccent),
+          "Forgot Password",
+          style: TextStyle(
+              fontSize: 14,
+              fontFamily: FontFamily.quickSand,
+              fontWeight: FontWeight.w600,
+              color: AppColors.deepBlueColor),
         ),
         onPressed: () {},
       ),
     );
   }
 
+  Widget _buildSignUpInsteadButton() {
+    return Align(
+      alignment: FractionalOffset.bottomLeft,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.all(0.0),
+        ),
+        child: Text(
+          "Sign up Instead",
+          style: TextStyle(
+              fontSize: 14,
+              fontFamily: FontFamily.quickSand,
+              fontWeight: FontWeight.bold,
+              color: AppColors.main[50]),
+        ),
+        onPressed: () {
+          Navigator.of(context).pushReplacementNamed(Routes.register);
+        },
+      ),
+    );
+  }
+
   Widget _buildSignInButton() {
-    return BasicFilledButton(text: "Sign In",
+    return BasicFilledButton(
+        text: "Sign In",
         callback: signIn,
         fillColor: AppColors.main[50] ?? Colors.blue,
         textColor: Colors.white);
   }
 
-  signIn(){
+  signIn() {
     print("clicked");
     if (_store.canLogin) {
       DeviceUtils.hideKeyboard(context);

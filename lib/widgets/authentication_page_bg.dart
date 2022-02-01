@@ -22,7 +22,7 @@ class AuthenticationPageBG extends StatelessWidget {
               clipper: CircularClipper(),
               child: Container(
                 width: maxWidth,
-                height: maxHeight - 35 0,
+                height: maxHeight - 450,
                 color: AppColors.main[50],
               ),
             ),

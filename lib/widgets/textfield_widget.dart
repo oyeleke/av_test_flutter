@@ -1,3 +1,5 @@
+import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/constants/font_family.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatelessWidget {
@@ -31,14 +33,18 @@ class TextFieldWidget extends StatelessWidget {
         obscureText: this.isObscure,
         maxLength: 25,
         keyboardType: this.inputType,
-        style: Theme.of(context).textTheme.bodyText1,
+        style: TextStyle(
+          fontFamily: FontFamily.quickSand,
+          fontSize: 16
+        ),
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             hintText: this.hint,
-            hintStyle: Theme.of(context)
-                .textTheme
-                .bodyText1!
-                .copyWith(color: hintColor),
+            hintStyle: TextStyle(
+              fontFamily: FontFamily.quickSand,
+              fontSize: 16,
+              color: hintColor
+            ),
             errorText: errorText,
             counterText: '',
             icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
@@ -56,7 +62,7 @@ class TextFieldWidget extends StatelessWidget {
     this.isObscure = false,
     this.isIcon = true,
     this.padding = const EdgeInsets.all(0),
-    this.hintColor = Colors.grey,
+    this.hintColor = AppColors.hintTextColor,
     this.iconColor = Colors.grey,
     this.focusNode,
     this.onFieldSubmitted,

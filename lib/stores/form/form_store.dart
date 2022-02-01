@@ -24,11 +24,20 @@ abstract class _FormStore with Store {
     _disposers = [
       reaction((_) => userEmail, validateUserEmail),
       reaction((_) => password, validatePassword),
-      reaction((_) => confirmPassword, validateConfirmPassword)
+      reaction((_) => confirmPassword, validateConfirmPassword),
+      reaction((_) => firstName, validateFirstName),
+      reaction((_) => lastName, validateLastName)
     ];
   }
 
   // store variables:-----------------------------------------------------------
+
+  @observable
+  String firstName = '';
+
+  @observable
+  String lastName = '';
+
   @observable
   String userEmail = '';
 
@@ -46,14 +55,17 @@ abstract class _FormStore with Store {
 
   @computed
   bool get canLogin =>
-      !formErrorStore.hasErrorsInLogin && userEmail.isNotEmpty && password.isNotEmpty;
+      !formErrorStore.hasErrorsInLogin &&
+      userEmail.isNotEmpty &&
+      password.isNotEmpty;
 
   @computed
   bool get canRegister =>
       !formErrorStore.hasErrorsInRegister &&
       userEmail.isNotEmpty &&
       password.isNotEmpty &&
-      confirmPassword.isNotEmpty;
+      firstName.isNotEmpty &&
+      lastName.isNotEmpty;
 
   @computed
   bool get canForgetPassword =>
@@ -73,6 +85,16 @@ abstract class _FormStore with Store {
   @action
   void setConfirmPassword(String value) {
     confirmPassword = value;
+  }
+
+  @action
+  void setFirstName(String value){
+    firstName = value;
+  }
+
+  @action
+  void setLastName(String value){
+    lastName = value;
   }
 
   @action
@@ -96,6 +118,27 @@ abstract class _FormStore with Store {
       formErrorStore.password = null;
     }
   }
+
+  @action
+  void validateFirstName(String value) {
+    if(value.isEmpty) {
+      formErrorStore.firstName = "First name can't be empty";
+    } else {
+      formErrorStore.firstName = null;
+    }
+  }
+
+
+  @action
+  void validateLastName(String value) {
+    if(value.isEmpty) {
+      formErrorStore.lastName = "Last name can't be empty";
+    } else {
+      formErrorStore.lastName = null;
+    }
+  }
+
+
 
   @action
   void validateConfirmPassword(String value) {
@@ -165,13 +208,20 @@ abstract class _FormErrorStore with Store {
   @observable
   String? confirmPassword;
 
+  @observable
+  String? firstName;
+
+  @observable
+  String? lastName;
+
   @computed
   bool get hasErrorsInLogin => userEmail != null || password != null;
 
   @computed
   bool get hasErrorsInRegister =>
-      userEmail != null || password != null || confirmPassword != null;
+      userEmail != null || password != null || firstName != null || lastName != null;
 
   @computed
   bool get hasErrorInForgotPassword => userEmail != null;
+
 }
